@@ -1,4 +1,7 @@
 <?php
+require 'vendor/autoload.php'; // ตรวจสอบว่าคุณได้ติดตั้งไลบรารี่ openai ผ่าน composer
+
+use OpenAI\Client;
 
 class Misc {
 
@@ -137,6 +140,8 @@ class Misc {
         $trim_title1 = trim(str_replace($vowels, "", $text));
         $trim_title2 = str_replace($spec, "-", $trim_title1);
         $url = strtolower($trim_title2);
+
+    $url = strtolower($trim_title2);
         return $url;
     }
 
@@ -179,4 +184,20 @@ class Misc {
         }
     }
 
+    // ฟังก์ชันสำหรับเรียกใช้ OpenAI
+    public function getChatResponse($prompt) {
+        $client = new Client('YOUR_OPENAI_API_KEY'); // เปลี่ยนเป็น API Key ของคุณ
+        $response = $client->completions()->create([
+            'model' => 'text-davinci-003', // เลือกโมเดลที่ต้องการใช้
+            'prompt' => $prompt,
+            'max_tokens' => 150,
+        ]);
+
+        return $response['choices'][0]['text'];
+    }
 }
+
+// ตัวอย่างการใช้งานฟังก์ชัน AI
+$misc = new Misc();
+echo $misc->getChatResponse('สวัสดีค่ะ วันนี้อากาศเป็นอย่างไรบ้างคะ?');
+?>
